@@ -1,0 +1,142 @@
+\documentclass[12pt,a4paper]{book}
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage{setspace}
+\usepackage{xypic}
+\usepackage{cite}
+\usepackage{changepage}
+\usepackage{mdframed}
+\usepackage{mathrsfs}
+\usepackage{multicol}
+\usepackage{comment}
+\usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
+\usepackage{lscape}
+\usepackage[toc,title]{appendix}
+\usepackage{tabularx} 
+\usepackage{caption}
+\usepackage{longtable}
+\usepackage[osf,sc]{mathpazo}
+\usepackage{hyperref}
+\usepackage{imakeidx}
+\makeindex
+
+\makeindex[name=sage,title={Funções e Métodos \Sage}]
+
+
+%% RASCUNHO
+\usepackage{draftwatermark}
+\SetWatermarkText{RASCUNHO}
+\SetWatermarkScale{1}
+\SetWatermarkAngle{60}
+
+\usepackage{fancybox}
+
+\usepackage{aurical}
+\usepackage[T1]{fontenc}
+
+
+\usepackage{hyperref}
+\usepackage{xspace}
+\newcommand{\Sage}{\emph{sagemath}\xspace}
+\newcommand{\sage}{\emph{sagemath}\xspace}
+
+\allowdisplaybreaks
+
+\newcommand\todoin[2][]{\todo[inline, caption={TODO}, #1]{
+\begin{minipage}{\textwidth-4pt}#2\end{minipage}}}
+
+% gambiarra pra ajeitar as margens
+\usepackage[dvips]{geometry}
+\geometry{a4paper, left=1in, right=1in, top=1in, bottom=1in}
+
+%%% 
+\title{Teoria dos Números Básica com o \Sage}
+\author{Vinicius Martins Teodosio Rocha}
+\date{}
+%%%
+
+%alias
+\input{../aliases}
+
+%alias fim
+
+\pagestyle{headings}
+\newtheorem{theorem}{Teorema}[chapter] %chapter
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposição}
+\newtheorem{lemma}[theorem]{Lema}
+\theoremstyle{definition}
+\newtheorem{definition}{Definição}
+\newtheorem{exercise}{Exercício}[chapter] 
+\newtheorem{example}{Exemplo}[chapter] 
+
+\usepackage{listings}
+
+
+\newcommand{\ils}[1]{\texttt{\color{black}{\colorbox{sageblue}{#1}}}}
+\newcommand{\ilso}[1]{\texttt{\color{black}{\colorbox{lightgreen}{#1}}}}
+\newcommand{\red}[1]{\color{red}#1\color{black}}
+\newcommand{\blue}[1]{\color{blue}#1\color{black}}
+
+
+% \onehalfspacing
+% \doublespacing
+
+\usepackage{tcolorbox}
+\tcbuselibrary{skins}
+\tcbuselibrary{breakable}
+\tcbuselibrary{raster}
+\tcbuselibrary{listings}
+\definecolor{sageblue}{HTML}{8BBEB2}
+\definecolor{lightgreen}{HTML}{E6F9AF}%{1B264F}
+\definecolor{sageintext}{HTML}{0D0630}
+\definecolor{sageouttext}{HTML}{0D0630} %{F5F3F5}
+\tcbset{ sagestylein/.style={left=0pt, right=0pt, top=0ex, bottom=0ex, middle=0pt, toptitle=0pt, bottomtitle=0pt,
+boxsep=4pt, listing only, fontupper=\small\ttfamily,
+breakable, parbox=false, 
+listing options={language=Python,breaklines=true ,breakatwhitespace=true, extendedchars=true, aboveskip=0pt, belowskip=0pt,numbers=left}} }
+\tcbset{ sagestyleout/.style={left=0pt, right=0pt, top=0ex, bottom=0ex, middle=0pt, toptitle=0pt, bottomtitle=0pt,
+boxsep=4pt, listing only, fontupper=\small\ttfamily,
+breakable, parbox=false, 
+listing options={language=Python,breaklines=true ,breakatwhitespace=true, extendedchars=true, aboveskip=0pt, belowskip=0pt}} }
+
+\newtcblisting{sageinput}{sagestylein,  colback=sageblue, sharp corners, boxrule=0.5pt, toprule at break=-0.10pt, bottomrule at break=-0.3pt, 
+coltext=sageintext}
+\newtcblisting{sageoutput}{sagestyleout, colback=lightgreen, colframe=white, frame empty, before skip=0pt, after skip=5pt,coltext=sageouttext,}
+
+
+\usepackage{showlabels}
+
+\begin{document}
+\maketitle
+% \thispagestyle{empty}
+%  \begin{tikzpicture}[remember picture,overlay]
+%    \node at (current page) {\includegraphics[width=\pdfpagewidth,height=\pdfpageheight]{capa/capa2.png}};
+%  \end{tikzpicture}
+\clearpage
+
+\frontmatter
+\tableofcontents
+
+\input{intro}
+
+
+\input{chap1}
+% \input{chap2}
+% \input{chap3}
+% \input{chap4}
+
+\newpage
+
+
+
+\printindex
+\printindex[sage]
+\backmatter
+\bibliography{tns} 
+\bibliographystyle{ieeetr}
+
+
+\end{document}

@@ -1,0 +1,77 @@
+\begin{theindex}
+
+  \item Algoritmo
+    \subitem  Euclides, cálculo do $\mdc$, 20
+    \subitem Euclides estendido, 22
+    \subitem Fatoração, 25
+
+  \indexspace
+
+  \item Coerção, 3
+  \item Compreensão de listas, 19
+  \item Condicional (If), 6
+  \item Congruência módulo $m$, 43
+  \item Conjectura
+    \subitem Collatz, 34
+    \subitem primos gêmeos, 36
+  \item Cálculo Simbólico, 39
+
+  \indexspace
+
+  \item Fatorial, 24
+  \item Fibonacci, 36
+  \item Frações contínuas, 28
+  \item Função
+    \subitem piso, 32
+
+  \indexspace
+
+  \item Grupo, 46
+    \subitem multiplicativo dos inteiros módulo $m$, 49
+  \item Gráfico
+    \subitem Curva implícita, 39
+
+  \indexspace
+
+  \item Indentação, 7
+  \item Inverso módulo $m$, 47
+
+  \indexspace
+
+  \item MDC, 19
+  \item método, 10
+
+  \indexspace
+
+  \item Número
+    \subitem abundante, 33
+    \subitem amigo, 33
+    \subitem deficiente, 33
+    \subitem perfeito, 33
+    \subitem primo, 18
+      \subsubitem gêmeo, 36
+      \subsubitem Merssenne, 33
+
+  \indexspace
+
+  \item Parâmetro, 9
+  \item Piso, 32
+  \item Ponto flutuante, 4
+
+  \indexspace
+
+  \item Recursividade, 24
+  \item Relação de equivalência, 44
+
+  \indexspace
+
+  \item Sequência
+    \subitem de Fibonacci, 36
+
+  \indexspace
+
+  \item Teorema
+    \subitem Bézout-Bachet, 22
+    \subitem Fundamental da Aritmética, 24
+
+\end{theindex}

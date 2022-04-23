@@ -1,0 +1,599 @@
+\chapter{Aritmética Modular}
+\label{chap:modular}
+
+
+\section{A congruência módulo $m$}
+
+Dado $m\in \NN$ fixado, dois inteiros $a$ e $b$ são
+ditos \emph{congruentes} módulo $m$ se $m \mid b-a$. Denotamos
+\index{Congruência módulo $m$}
+essa relação por $a \equiv b \pmod m$.
+
+\begin{example}\label{ex:modbas}
+  $137 \equiv 61 \pmod{19}$ pois $19 \mid 137-61 = 76 = 4\times 19$,
+  mas também $137 \equiv 4 \pmod{19}$ pois $137-4 = 133 = 7\times 19$.
+  Também podemos usar números negativos: $-19 \equiv 2 \pmod 3$
+  pois $3 \mid -19 - 2 = -21 = 3 \times (-7)$.
+\end{example}
+
+Relembramos as principais propriedades sobre a congruência
+e a aritmética modular na proposição a seguir. As demonstrações
+podem ser encontradas em \cite[Lema 1.1]{tnumgugu}.
+\begin{proposition}\label{prop:prarit}
+  Sejam $m \in \NN$, $a,b,c,d \in \ZZ$. Valem as propriedades
+  a seguir:
+  \begin{itemize}
+    \item[i)] $a \equiv a \pmod m$,
+    \item[ii)] Se $a \equiv b \pmod m$, então $b \equiv a \pmod m$,
+    \item[iii)] Se $a\equiv b \pmod m$ e $b \equiv c \pmod m$, então
+    $a \equiv c \pmod m$.
+    \item[iv)] Se $a\equiv b \pmod m$ e
+        $c \equiv d \pmod m$, então $a+c \equiv b+d\pmod m$
+    \item[v)] Se $a\equiv b \pmod m$ e $c \equiv d \pmod m$,
+        então $ac \equiv bd\pmod m$
+  \end{itemize}
+\end{proposition}
+
+As três primeiras propriedades implicam que a congruência
+módulo $m$ é uma relação de equivalência, enquanto as últimas duas
+dizem que a congruência módulo $m$ respeita a aritmética.
+
+Se $a = qm +r$ é a divisão euclidiana de $a$ por $m$,
+então $m \mid a-r$ e portanto $a\equiv r \pmod m$. Assim, dois
+números com o mesmo resto na divisão por $m$ são congruentes.
+É um exercício simples verificar que a recíproca também
+vale; isto é, se $a \equiv b\pmod m$ então $a$ e $b$ deixam
+o mesmo resto na divisão por $m$. Esses resultados
+implicam que podemos trabalhar com congruência
+módulo $m$ nos limitando aos possíveis restos 
+da divisão por $m$: $0,1,2,\cdots,m$. Esse é um
+fato importante ao se trabalhar com aritmética modular
+no \sage.
+
+% Considere a divisão euclidiana de $a$ e $b$ por $m$, 
+% digamos $a = q_1m+r1$ e $b = q_2m+r_2$. Note que se $a$ e $b$
+% deixam o mesmo, isto é, $r_1 = r_2$, então $b-a = (q_2-q_1)m$,
+% portanto $m \mid b-a$, logo $a \equiv b \pmod m$.
+% A  recíproca também é válida: se $a \equiv b \pmod m$, então
+% $m \mid b-a = (q_2-q_1)m + (r_2-r_1) \therefore m\mid r_2 - r_1$
+% e, como $0\leq r_1,r_2 < m$ devemos ter $r_1 = r_2$. Também
+% é óbvio que todo número é equivalente.
+
+O $\Sage$ tem diversas ferramentas para se trabalhar com aritmética modular.
+A forma mais primitiva é usar o operador \ils{\%} do próprio Python; a
+expressão \ils{a \% m} retorna o resto da divisão de $a$ por $m$,
+o resultado é, como vimos acima, congruente a $a$ módulo $m$.
+
+\begin{sageinput}
+3 % 2
+\end{sageinput}
+\begin{sageoutput}
+1
+\end{sageoutput}
+
+O operador \ils{\%} deve ser usado com cuidado pois é um operador
+que retorna um inteiro da classe \ils{Integer} (ou \ils{int} no Python),
+de forma que \ils{3 \% 5 == 11 \% 8} retorna \ilso{True}, no entanto,
+da forma como definimos, $3 \pmod 5 = 11 \pmod 8$ não faz sentido. Além
+disso, o \ils{\%} é um operador binário, então devemos
+ter cautela ao pensar em \ils{\% m} como um $\pmod m$ no final
+de uma expressão: não podemos escrever, por exemplo,
+$2 + 2 \pmod 3$ como \ils{2 + 2 \% 2}. Teste e veja o resultado!
+
+Na prática existe outra forma de se trabalhar com aritmética
+modular no \sage, a função \ils{mod} e o método \ils{.mod},
+que funcionam de formas ligeiramente distintas.
+Vejamos alguns exemplos, compare com os resultados do Exemplo
+\index[sage]{\ils{.mod}} \index[sage]{\ils{mod}}
+\ref{ex:modbas}:
+\begin{sageinput}
+mod(137,19)
+mod(137,19) == mod(4,19)
+(-19).mod(3)
+\end{sageinput}
+\begin{sageoutput}
+4
+True
+2
+\end{sageoutput}
+
+Note que, quando $m>0$, tanto o \ils{mod} quanto o \ils{\%}
+retornam o resto (se $m<0$ o comportamento do \ils{\%} 
+é diferente). Existe uma diferença fundamental entre
+no resultado da função \ils{mod}. Enquanto o método \ils{.mod}
+e o operador \ils{\%} retornam um número inteiro, o resultado
+da função \ils{mod} é um \emph{inteiro módulo $m$}.
+\begin{sageinput}
+parent(mod(5,13))
+\end{sageinput}
+\begin{sageoutput}
+Ring of integers modulo 13
+\end{sageoutput}
+
+\paragraph{Inteirmos módulo $m$} 
+O tipo de objeto retornardo pela função \ils{mod} é chamado
+de \emph{inteiro módulo $m$}. A ideia é que, como todo
+inteiro é congruente a um dos restos $0,1,\dots,m-1$ módulo $m$
+podemos \emph{ignorar} os demais inteiros e trabalhar apenas
+com os restos, identificando os inteiros fora desse intervalo
+com seu resto na divisão por $m$. Formalmente, o que estamos
+usando é o fato da congruência ser uma
+\emph{relação de equivalência}, \index{Relação de equivalência}
+de acordo com as três primeiras propriedades da Proposição
+\ref{prop:prarit}. O conjunto dos inteiros módulo $m$ seria
+portanto o conjunto quociente de $\ZZ$ por essa relação
+de equivalência. Em geral denotamos tal conjunto por
+$\ZZ_m$ ou $\ZZ/m\ZZ$. No \sage, podemos definir
+o conjunto dos inteiros módulo $m$ usando a função \ils{Zmod},
+outro nome para essa função é  \ils{IntegerModRing}.
+A seguir definimos $\ZZ_7$ e listamos seus elementos.
+\index[sage]{\ils{Zmod}} \index[sage]{\ils{IntegerModRing}}
+\begin{sageinput}
+ZZ7 = Zmod(7)
+print(ZZ7)
+print(list(ZZ7))
+\end{sageinput}
+\begin{sageoutput}
+Ring of integers modulo 7
+[0, 1, 2, 3, 4, 5, 6]
+\end{sageoutput}
+Apesar de serem exibidos como inteiros, formalmente
+os elementos de $\ZZ_m$ são 
+classes de equivalência, em geral
+denotados por $[k]$, $\bar k$ ou $k + m\ZZ$,
+e a comparação com o \ils{==} desses elementos é,
+na verdade, a congruência $\cdot \equiv \cdot \pmod m$.
+ Para manipular inteiros como
+elementos desse conjunto podemos usar a coerção:
+\begin{sageinput}
+ZZ3 = Zmod(3)
+a = 13
+b = ZZ3(a)
+print(a, parent(a))
+print(b, parent(b))
+\end{sageinput}
+\begin{sageoutput}
+13 Integer Ring
+1 Ring of integers modulo 3
+\end{sageoutput}
+
+A linha $3$ tem o mesmo efeito de \ils{b = mod(a,3)}.
+A aritmética entre elementos de $\ZZ_m$ funciona como 
+esperado pela congruência módulo $m$, podemos
+fazer as operações tanto usando a coerção para \ils{Zmod(m)}
+ou usando o \ils{mod}
+\begin{sageinput}
+ZZ7 = Zmod(7)
+(a,b) = (4,5)
+print("Usando o mod:", mod(a,7) + mod(b,7))
+print("Usando a coercao:", ZZ7(a) + ZZ7(b))
+print("Sao iguais:", mod(a,7) + mod(b,7) == ZZ7(a) + ZZ7(b))
+\end{sageinput}
+\begin{sageoutput}
+Usando o mod: 2
+Usando a coercao: 2
+Sao iguais: True
+\end{sageoutput}
+E, de fato, $4 + 5 \equiv 2 \pmod 7$ \footnote{E se você
+fizesse a conta usando \ils{mod(a+b,7)}? O resultado seria
+o mesmo! Na verdade, esse fato é essencial ao trabalharmos
+com $\ZZ_m$, já que garante que a soma herdada dos inteiros
+está \emph{bem definida}, o que permite trabalhar com
+$\ZZ_m$ como um grupo.}.
+Se, ao invés de usar o \ils{mod} ou a coerção tívessemos
+usado o método \ils{.mod} ou o operador \ils{\%}, 
+os objetos retornados seriam diferentes, no entanto,
+ao compará-los com o \ils{==} o resultado seria verdadeiro
+, por exemplo, \ils{mod(3,7) == 3 \% 7} retorna \ilso{True}
+\footnote{Para os conhecedores de Python: Isso também
+é feito no Python, por exemplo, \ils{float(1) == int(1)}
+retorna \ilso{True}}. No entanto os métodos disponíveis
+para os dois resultados são bastante distintos.
+
+Como há apenas uma quantidade finita de elementos em cada
+$\ZZ_m$, podemos listar o resultado de todas as somas possíveis
+entre seus elementos. Isso pode ser feito usando o
+o método \ils{.addition\_table}.
+\index[sage]{\ils{.addition\_table}}
+\begin{sageinput}
+ZZ7 = Zmod(7)
+ZZ7.addition_table(names='elements')                                                               
+\end{sageinput}
+\begin{sageoutput}
++  0 1 2 3 4 5 6
+ +--------------
+0| 0 1 2 3 4 5 6
+1| 1 2 3 4 5 6 0
+2| 2 3 4 5 6 0 1
+3| 3 4 5 6 0 1 2
+4| 4 5 6 0 1 2 3
+5| 5 6 0 1 2 3 4
+6| 6 0 1 2 3 4 5
+\end{sageoutput}
+O parâmetro opcional \ils{names='elements'} serve para
+exibir o resultado de forma mais natural, tente retirá-lo
+e interpretar o resultado. Ao usar
+a função \ils{show} para exibir o resultado, obtemos a 
+Tabela \ref{tab:Z7}
+
+\begin{table}[h]
+$$
+\newcommand{\Bold}[1]{\mathbf{#1}}{\setlength{\arraycolsep}{2ex}
+\begin{array}{r|*{7}{r}}
+\multicolumn{1}{c|}{+}&0&1&2&3&4&5&6\\\hline
+{}0&0&1&2&3&4&5&6\\
+{}1&1&2&3&4&5&6&0\\
+{}2&2&3&4&5&6&0&1\\
+{}3&3&4&5&6&0&1&2\\
+{}4&4&5&6&0&1&2&3\\
+{}5&5&6&0&1&2&3&4\\
+{}6&6&0&1&2&3&4&5\\
+\end{array}}
+$$
+\caption{Tabela de adição do $\ZZ_7$}
+\label{tab:Z7}
+\end{table}
+
+\begin{exercise}
+\label{ex:grupoz7}
+  Observe, da Tabela \ref{tab:Z7}, que: \textbf{1)} o $0$ é um
+  elemento neutro para a adição, isto é,
+  $0 + a \equiv a + 0 \equiv a \pmod 7$; \textbf{2)} para todo
+  $a \in \ZZ_7$, existe um $b \in \ZZ_7$ tal que $a+b \equiv b+a \equiv 0
+  \pmod 7$, em outras palavras, todo elemento tem um
+  inverso aditivo em $\ZZ_7$; e \textbf{3)} a soma
+  em $\ZZ_7$, sendo herdada de $\ZZ$, é associativa.
+  Verifique que essas três propriedades valem para todo
+  os conjuntos $\ZZ_m$. Dizemos que $\ZZ_m$ é um \emph{grupo}
+  \index{Grupo}
+  com a adição módulo $m$.
+\end{exercise}
+
+
+
+Uma das aplicações da aritmética modular é obter
+informações sobre problemas envolvendo números inteiros
+o analisando
+em um ambiente onde há finitas possibilidades a serem
+testadas.A ideia
+é que, se alguma igualdade vale entre expressões
+envolvendo inteiros, então ela também vale quando
+reduzimos a expressão módulo $m$.  Vejamos um exemplo
+em que a aritmética
+modular resolve uma equação diofantina. 
+
+\begin{example}
+ Considere
+  a equação $x^2 + y^2 = 4xy + 3$. 
+  No entanto, suponha que exista uma solução $(x,y)$ para tal equação,
+  devemos ter, portanto, $x^2 + y^2 \equiv 4xy + 3 \pmod 4$.
+  Analisemos os casos, sabemos que existem $4$ restos possíveis
+  para um inteiro na divisão por $4$, assim $x \equiv 0,1,2
+  \text{ ou } 3 \pmod 4$, portanto $x^2 \equiv 0^2, 1^2, 2^2
+  \text{ ou }  3^2 \pmod 4$, assim $x^2 \equiv
+  \pmod 4$. De forma análoga $y^2 \equiv  0 \text{ ou } 1 \pmod 4$,
+  assim, para o lado esquerdo, temos
+  $$
+    x^2 + y^2 \equiv (0 \text{ ou } 1) + (0 \text{ ou } 1) \equiv 0, 1
+    \text{ ou } 2 \pmod 4
+  $$
+  Por outro lado, no lado direito, como $4xy$ é múltiplo de $4$,
+  temos que $4xy \equiv 0 \pmod 4$, assim
+  $$
+    4xy + 3 \equiv 3 \pmod 4
+  $$
+  Como $3 \not \equiv 0, 1 \text{ ou } 2 \pmod 4$ concluímos que
+  a suposta solução não pode existir. Assim, $x^2 + y^2 = 4xy + 3$
+  não possui soluções em $\ZZ$. Essa equação define uma
+  hipérbole em no plano real, o que provamos é que não há
+  nenhum ponto nessa hipérbole com ambas as coordenadas inteiras.
+\end{example}
+
+Ainda que a análise de uma
+equação módulo $m$ não produza uma inconsistência
+que permita concluir a não existência de soluções, como acima,
+por vezes podemos
+subtrair dela alguma informação (veja o exercício \ref{ex:ecdiofcong}).
+
+Vale destacar que, no caso geral, 
+a análise da equação módulo $m$ não resolve completamente
+o problema: 
+existem equações que possuem soluções módulo $m$ para todo $m$
+mas não possuem soluções inteiras. 
+O procedimento de analisar soluções para equações nos inteiros
+estudando as reduções módulo $m$ é estudado pelo Princípio
+de Hasse, veja \cite{aitken2011counterexamples} para
+uma descrição detalhada.
+
+\section{Invertíveis módulo $m$}
+\label{sec:invmodm}
+Voltamos às propriedades da aritmética modular. Note que
+não há, na Proposição \ref{prop:prarit}, uma propriedade análoga ao
+\emph{cancelamento} que é permitido para
+números inteiros: se $ac = bc$ com $c \neq 0$, então
+$a = b$. Essa propriedade não á válida em geral na aritmética
+modular, por exemplo
+$$
+  4\times 3  = 12 \equiv 0 \equiv 18 = 3\times 6 \pmod 6
+\text{ mas } 4 \not\equiv 6 \pmod 6
+$$
+ou seja, não podemos
+cancelar o $3$ em ambos os lados da congruência. Em alguns
+casos o cancelamento pode, de fato, ser feito. A proposição
+a seguir mostra o caso geral, a demonstração
+fica a cargo ao leitor.
+
+\begin{proposition}
+  Sejam $a,b,c \in \ZZ$ e $m \in \NN$. Se $ac \equiv bc
+  \pmod m$, então $a \equiv b \pmod{\frac{m}{d}}$, onde
+  $d = \mdc(m,c)$. Em particular, se $\mdc(m,c) = 1$,
+  então $a \equiv b \pmod m$.
+\end{proposition}
+
+A validade de cancelar um $c$ numa equação em
+congruência está intimamente ligado com o
+conceito de invertível módulo $m$.  Dizemos que
+$c \in \ZZ$ é invertível módulo $m$ se existe $c' \in \ZZ$
+tal que $cc' \equiv 1 \pmod m$.  O inteiro
+$c'$ é dito \emph{inverso} de $c$ módulo $m$.
+\index{Inverso módulo $m$}
+Por exemplo,
+$c = 3$ é invertível módulo $4$ pois $c' = 3$
+satisfaz $cc' = 3\times 3 \equiv 9 \equiv 1 \pmod m$.
+Por outro lado $2$ não é invertível módulo $4$ (verifique isso!).
+
+Verifiquemos se $7$ é invertível módulo $11$. 
+Para isso basta calcular $7d \pmod{11}$ para todos
+os resíduos $d$ módulo $11$ possíveis:
+\begin{sageinput}
+c = 7
+for d in [0..10]:
+  print("7*{} = ".format(d), mod(c*d,11), "mod 11")
+\end{sageinput}
+\begin{sageoutput}
+7*0 =  0 mod 11
+7*1 =  7 mod 11
+7*2 =  3 mod 11
+7*3 =  10 mod 11
+7*4 =  6 mod 11
+7*5 =  2 mod 11
+7*6 =  9 mod 11
+7*7 =  5 mod 11
+7*8 =  1 mod 11
+7*9 =  8 mod 11
+7*10 =  4 mod 11
+\end{sageoutput}
+Como $7\times 8 \equiv 1 \pmod{11}$, temos que $7$ é invertível
+módulo $11$. Implemente o caso geral no exercício a seguir.
+
+\begin{exercise}
+\label{ex:invers}
+  Crie um código que encontre, usando a definição,
+  todos os invertíveis módulo um $m$ dado (Para cada $c$,
+  percorra todos os resíduos possíveis $d = 0, 1, \dots, m-1$,
+  verificando se $cd \equiv 1 \pmod m$). 
+  \begin{itemize}
+    \item[a)] Teste o seu código para alguns valores distintos de $m$. 
+    \item[b)] Se um $c$ é invertível módulo $m$, quantas
+    inversas ele possui?
+    \item[c)] Você consegue encontrar algum padrão
+    nos invertíveis módulo $m$, $m$ fixo?
+    \item[d)] Você consegue encontrar algum padrão na quantidade
+    de invertíveis módulo $m$? Teste primeiramente valores primos
+    para $m$, e,  em seguida, potências de primos.
+    \item[e)] Use o método \ils{.multiplication\_table}
+    para exibir a tabela de multiplicação do anel de inteiros módulo
+    $m$, como fizemos com a adição.
+  \end{itemize}
+\end{exercise}
+
+A busca por invertíveis e inversas que implementamos
+através da força bruta no exercício anterior pode ser
+reduzida a um calculo já conhecido nosso.
+
+\begin{proposition}
+\label{prop:inversa}
+  Seja $m \in \NN$ fixado. Um inteiro $c \in \ZZ$ é
+  invertível módulo $m$ se e somente se $\mdc(a,m) = 1$.
+  Além disso, se $x,y \in \ZZ$ são tais que
+  $cx+my = 1$, então $x$ é uma inversa para $c$
+  módulo $m$.
+\end{proposition}
+\begin{proof}
+  Pelo Teorema \ref{thm:bezout}, se $c$ e $m$ são coprimos,
+  existem $x,y \in \ZZ$ tais que $cx + my = 1$, reduzindo
+  essa igualdade módulo $m$ temos que $cx \equiv 1 \pmod m$,
+  portanto $c$ é invertível módulo $m$ e $x$ é sua 
+  inversa. Por outro lado, se $c$ é invertível módulo $m$ 
+  existe $c' \in \ZZ$ tais que $cc' \equiv 1 \pmod m$, portanto
+  $m \mid cc' - 1$, logo existe $k \in \ZZ$ tal que
+  $km = cc' - 1 \therefore cc' - km = 1$. Suponha agora
+  que $\mdc(m,c)\neq 1$,
+  então existe um primo $p$ tal que $p\mid c$ e $p\mid m$,
+  portanto $p \mid cc'-km = 1$, absurdo.
+\end{proof}
+
+Segue então que a função \ils{xgcd}, que implementa o
+algorito de Euclides estendido, que vimos na Seção
+\ref{sec:mdc}, é suficiente para o estudo dos invertíveis módulo
+$m$, já que retorna o $\mdc$ e o par $x$ e $y$.
+\begin{sageinput}
+(c,m) = (7,11)
+print("d =", d)
+print("d (mod m) =", mod(d,m))
+print("{}*{} = ".format(mod(d,m),c), mod(d*c,m))
+\end{sageinput}
+\begin{sageoutput}
+d = -3
+d (mod m) = 8
+8*7 =  1
+\end{sageoutput} 
+Como vimos acima, eventualmente o $x$ retornado pelo
+algoritmo de Euclides estendido está fora
+do intervalo $\{0,1,2,\cdots, m-1\}$, no 
+entanto basta tomar o resíduo congruente nesse intervalo.
+
+
+\begin{exercise}
+  Resolva novamente o Exercício \ref{ex:invers}
+  usando o \ils{xgcd}. 
+\end{exercise}
+
+Podemos encontrar a inversa usando o método \ils{.inverse\_mod}
+disponível para os inteiros, o resultado também será
+um inteiro.
+\begin{sageinput}
+7.inverse_mod(11)
+print(parent(7.inverse_mod(11)))
+\end{sageinput}
+\begin{sageoutput}
+8
+Integer Ring
+\end{sageoutput}
+Para se manter no mundo dos inteiros módulo $m$,
+podemos calcular a inversa com o \ils{\^{}(-1)}
+\begin{sageinput}
+Z11 = Zmod(11)
+a = Z11(7)
+print(a^(-1))
+print(parent(a^(-1)))
+\end{sageinput}
+\begin{sageoutput}
+8
+Ring of integers modulo 11
+\end{sageoutput}
+
+O subconjunto de $\ZZ_m$ formado pelos invertíveis módulo $m$ é
+denotado por $\ZZ_m^\ast$ e chamado de \emph{grupo multiplicativo dos
+inteiros módulo $m$}
+\index{Grupo!multiplicativo dos inteiros módulo $m$}
+\footnote{Para os conhecedores de álgebra: Se $A$ é um anel
+comutativo com identidade
+então $A^\ast$ denota o grupo das unidades, isto é, dos invertíveis,
+de $A$. O conjunto dos inteiros módulo $m$ é um dos primeiros
+exemplos de aneis estudados.}. Já vimos o conceito de grupo
+no Exercício \ref{ex:grupoz7}. Não é difícil verificar que
+$\ZZ_m^\ast$ também satisfaz as três propriedades lá mencionadas.
+Explicitamos no exercício a seguir.
+
+\begin{exercise}
+  Seja $m  \in \NN$ fixado e $\ZZ_m^\ast$ o conjunto dos
+  invertíveis módulo $n$.  Verifique que 
+  \begin{itemize}
+    \item[a)] $1 \in \ZZ_m^\ast$ e $1\times n \equiv n \times 1 \equiv 1
+        \pmod m$.
+    \item[b)] Para todo $n \in \ZZ_m^\ast$ existe $n'$ tal que
+    $nn' \equiv n'n \equiv 1 \pmod m$.
+    \item[c)] A  multiplicação módulo $m$ é associativa, isto é,
+    para quaisquer $n_1,n_2,n_3 \in \ZZ_m^*$, vale $n_1(n_2n_3)
+    \equiv (n_1n_2)n_3 \pmod m$. 
+  \end{itemize}
+\end{exercise}
+
+Justifica-se assim o uso do termo grupo multiplicativo para
+$\ZZ_m^*$. O \sage sabe trabalhar com grupos e podemos, inclusive,
+definir o grupo dos invertíveis módulo $m$ usando o
+método \ils{unit\_group}. No entanto, esse grupo será definido
+no sage de forma abstrata e não será útil aos nossos propositos,
+de forma que continuaremos trabalhando com inteiros e inteiros
+módulo $m$.
+
+Note que $\ZZ_m^*$, sendo subconjunto de $\ZZ_m$,
+também é um conjunto de classes de equivalência, de forma
+que, apesar de existirem infinitos inteiros que são
+invertíveis módulo $m$ estamos considerando apenas os
+que não são congruentes entre si. Podemos então
+listar os elementos em $\ZZ_m^*$, usando
+que $\ZZ_m = \{0,1,2,\dots,m-1\}$ (tecnicamente os 
+elementos são classes, não inteiros). Pela Proposição
+\ref{prop:inversa} basta nos limitarmos aos 
+coprimos com $m$. Para isso usamos uma compreensão de listas
+com um condicional.
+\begin{sageinput}
+m = 16
+[n for n in [0..m-1] if gcd(n,m) == 1]
+\end{sageinput}
+\begin{sageoutput}
+[1, 3, 5, 7, 9, 11, 13, 15]
+\end{sageoutput}
+Matematicamente, o código na compreensão de listas
+é precisamente $$\{n \in \{0,1,\dots,m-1\} \mid \mdc(n,m) = 1\},$$
+o mesmo conjunto que usamos para a definição da função $\varphi$
+na Seção \ref{sec:funarit}! Concluímos portanto que existem
+$\varphi(m)$ invertíveis módulo $m$, a menos de congruencia,
+ou seja, $|\ZZ_m^\ast| = \varphi(m)$. Mencionamos que o $\varphi$
+pode ser calculada usando a função \ils{euler\_phi}.
+
+
+\begin{tcolorbox}[colback=red!5,colframe=red!75!black,title=Objetivo]
+ Tentar escrever os resultados envolvendo $\ZZ_m^\ast$
+em linguagem não algébrica
+\end{tcolorbox}
+\section{Fermat, Euler e Wilson}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Teorema Chines dos Restos}
+
+
+\section{Criptografia (como subseção do Explore?)}
+\label{sec:cripto}
+
+\begin{itemize}
+  \item exponenciação binária
+  \item unidades, Teorema de Euler
+  \item Teorema chinês dos restos
+  \item raizes primitivas (fórmula de \cite{disquisitiones})
+\end{itemize}
+
+
+\section{Explore!}
+
+
+\subsection{Algoritmo AKS - Primos em \textbf{P}}
+
+Primos em tempo polinomial \cite{agrawal2004primes}
+
+
+\subsection{Teste de Miller-Rabin}
+
+\subsection{Encontrando $a,b \in \ZZ$ tais que $p = a^2 + b^2$}
+
+\section{Exercises}
+
+\begin{exercise}\label{ex:ecdiofcong}
+  Considere a equação diofantina $x^4 + y^4 = 3z^4$.
+  \begin{itemize}
+    \item[a)] Liste todos os resíduos possíveis de
+    $n^4 \pmod 5$ (Dica: use compreensão de listas
+    e a função \ils{mod})
+    \item[b)] Prove que se $(x,y,z)$ é solução da equação,
+    então $x \equiv y \equiv z \equiv 0 \pmod 5$.
+    \item[c)] Tome $5^n$ a maior potência de $5$ dividindo
+    simultaneamente $x$, $y$ e $z$, fatore $5^n$ na
+    equação inicial e encontre uma equação
+    $x'^4 + y'^4 = 3z'^4$ onde algum dos $x',y',z'$ não
+    é múltiplo de $5$.
+    \item[d)] Conclua o argumento mostrando que a equação
+    inicial não tem solução.
+  \end{itemize}
+\end{exercise}
+
+\begin{exercise}
+  Vimos na Seção \ref{sec:invmodm} como manipular inversas
+  módulo $m$. Lá comentamos que, se definirmos o grupo
+  $\ZZ_m$, o \sage consegue trabalhar com o grupo dos
+  invertíveis módulo $m$, o $\ZZ_m^*$.
+  \begin{itemize}
+    \item[a)] Tome $m = 8$ e $p = 11$. Crie \ils{A} e \ils{B}
+    como $\ZZ_m$ e $\ZZ_p$, respectivamente.
+    \item[b)] Use o método \ils{.unit_group} para obter o grupo
+    dos invertíveis módulo $m$ e módulo $p$. Explore os
+    grupos criados com o método \ils{.multiplication_table}.
+    \item[c)] asd
+  \end{itemize}
+\end{exercise}

@@ -1,0 +1,97 @@
+\chapter{Equações Diofantinas}
+\label{chap:eqdiof}
+
+\begin{itemize}
+  \item o que são equações diofantinas
+  \item exemplos famosos 
+\end{itemize}
+
+\section{Equação Linear no caso geral $aX+bY = c$}
+\label{sec:dioflinear}
+Vimos, no Teorema \ref{thm:bezout}, que dados
+$a,b \in \ZZ$ não ambos nulos existem
+$x,y \in \ZZ$ tais que $ax+by = c$ quando
+$c = \mdc(a,b)$. Nessa seção
+discutiremos a equação diofantina linear
+no caso mais geral $aX + bY = c$ com $a,b,c \in \ZZ$. 
+
+Nos preocupamos primeiramente com a existência
+de soluções. Note que, como $\mdc(a,b)$ divide
+$a$ e $b$, então $\mdc(a,b)\mid ax+by$ para
+quaisquer $x,y \in \ZZ$, portanto, se $ax+by = c$,
+então $\mdc(a,b)\mid c$. Segue que a equação
+$aX + bY = c$ não possui soluções se
+$\mdc(a,b)\nmid c$. Por outro lado, se $c$ 
+é divisível por $\mdc(a,b)$, digamos
+$c = \mdc(a,b)\tilde{c}$ para algum $\tilde{c} \in \ZZ$. 
+Pelo teorema de Bézout \ref{thm:bezout}, existem
+$x,y \in \ZZ$ tais que $ax+by = \mdc(a,b)$,
+portanto $\tilde{x} = x\tilde{c}$ e
+$\tilde{y} = y\tilde{c}$ satisfazem
+$$
+a\tilde{x} + b\tilde{y} = ax\tilde{c} + by\tilde{c}
+ = (ax+by)\tilde{c} = \mdc(a,b)\tilde{c} = c.
+$$
+Portanto, $aX + bY = c$ tem solução se e somente se
+$\mdc(a,b) \mid c$. Além disso é possível provar
+que a solução não é única. Na verdade, se existe uma
+solução, existem infinitas delas. O Teorema a seguir
+resume os fatos importantes sobre a equação
+diofantina linear.
+\begin{theorem}
+\label{thm:eqdlineargeral}
+  Sejam $a,b,c \in \ZZ$ com $a$ e $b$ não ambos nulos. Denote
+  $d = \mdc(a,b)$. A equação diofantina linear $aX + bY = c$ tem
+  solução se e somente se $c\mid d$. Se $(x_0,y_0) \in \ZZ^2$ é
+  uma solução, então todas as soluções são da forma
+  $(x_0 + tb/d,y_0 - ta/d)$ com $t \in \ZZ$. Além disso, se
+  supormos que $a,b \in \NN$ são coprimos e $c>ab-a-b$, então
+  a equação admite soluções com $x$ e $y$ positivos.
+\end{theorem}
+
+\begin{sageinput}
+input
+\end{sageinput}
+\begin{sageoutput}
+output
+\end{sageoutput}
+
+
+\begin{tcolorbox}[colback=red!5,colframe=red!75!black,title=My nice heading]
+This is another \textbf{tcolorbox}.
+\tcblower
+Here, you see the lower part of the box.
+\end{tcolorbox}
+
+\section{Ternos Pitagóricos}
+\begin{itemize}
+  \item gerando soluções com $a,b$ ou $c$ dados.
+  \item contando soluções?
+  \item versão com matrizes
+\end{itemize}
+
+\section{Equação de Pell}
+\begin{itemize}
+  \item gerando soluções a partir de uma inicial
+  \item versão com matrizes
+\end{itemize}
+
+\section{Outras}
+\begin{itemize}
+  \item ver livro sobre diofantinas
+  \item exemplo do numberphile
+\end{itemize}
+
+
+\section{Explore!}
+
+\section{Exercises}
+
+\begin{exercise}
+  Usando a afirmação final do Teorema \ref{thm:eqdlineargeral}
+  e o exercício \ref{ex:eqdlinearsolpos}, crie uma função que,
+  para $a$ e $b$ naturais dados, retorne os valores de $c$ para os quais
+  existem soluções positivas para $aX + bY = c$. (O resultado
+  deve ser uma lista de valores e uma constante $k$ para os quais $c\geq k$
+  também satisfaz a condição desejada.)
+\end{exercise}
