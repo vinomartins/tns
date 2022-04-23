@@ -1,0 +1,15 @@
+*.bak
+*.ps
+*.log
+*.idx
+*.bbl
+*.brf
+*.glo
+*.dvi
+*.toc
+*.blg
+*.ilg
+*.ind
+*.out
+*.wsp
+*.fls
