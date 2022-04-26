@@ -17,3 +17,6 @@
 *.listing
 *.fdb_latexmk
 *.code-workspace
+/slides
+/ref
+/capa
